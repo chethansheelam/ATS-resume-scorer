@@ -1,0 +1,49 @@
+# OS / editor files
+.DS_Store
+.vscode/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local environment / secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Streamlit secrets
+frontend/.streamlit/
+!frontend/.streamlit/config.toml
+
+# Project config files that should stay local
+config.py
+**/config.py
+backend/core/config.py
+
+# Dataset and generated data
+dataset/
+*.csv
+*.tsv
+uploads/
+output/
+
+# Logs
+*.log
+
+# ML / model artifacts
+*.safetensors
+*.pkl
+*.bin
+
+# Generated docs / reports
+*.pdf
+*.docx
+*.doc
