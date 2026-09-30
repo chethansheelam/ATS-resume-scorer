@@ -144,6 +144,8 @@ def _humanize(exc: Exception) -> str:
         return 'Wrong email or password'
     if 'user already registered' in msg.lower() or 'already been registered' in msg.lower():
         return 'An account with this email already exists — try signing in'
-    if 'password should be at least' in msg.lower():
-        return 'Password too short (Supabase default is 6 characters)'
+    if 'rate limit' in msg.lower():
+        return 'Supabase email rate limit exceeded (max 3-4 emails/hour on free tier). Disable "Confirm email" in Supabase dashboard or wait an hour.'
+    if 'invalid' in msg.lower() and 'email' in msg.lower():
+        return 'This email address is rejected by Supabase validation (avoid placeholder emails like test@gmail.com and use a real personal/work email).'
     return msg

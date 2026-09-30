@@ -8,7 +8,8 @@ from groq import Groq
 logger=logging.getLogger('ats_resume_scorer')
 
 
-GROQ_MODEL='llama-3.3-70b-versatile'
+GROQ_MODEL = os.getenv('GROQ_MODEL', 'openai/gpt-oss-120b')
+FALLBACK_MODELS = ['openai/gpt-oss-20b', 'qwen/qwen3.8-27b']
 
 _client=None
 
@@ -76,18 +77,27 @@ Resume Text:
 {raw_text}"""
 
 def _call_groq(client:Groq, system_prompt:str, user_prompt:str)->str:
-
-    response=client.chat.completions.create(
-        model=GROQ_MODEL, 
-        messages=[
-            {'role': 'system', 'content': system_prompt},
-            {'role': 'user', 'content': user_prompt}
-        ],
-        temperature=0.0,
-        max_tokens=4096
-    )
-
-    return response.choices[0].message.content.strip()
+    candidate_models = [GROQ_MODEL] + [m for m in FALLBACK_MODELS if m != GROQ_MODEL]
+    last_err = None
+    for model_name in candidate_models:
+        try:
+            response = client.chat.completions.create(
+                model=model_name,
+                messages=[
+                    {'role': 'system', 'content': system_prompt},
+                    {'role': 'user', 'content': user_prompt}
+                ],
+                temperature=0.0,
+                max_tokens=4096
+            )
+            return response.choices[0].message.content.strip()
+        except Exception as exc:
+            last_err = exc
+            if 'model_not_found' in str(exc).lower() or '404' in str(exc):
+                logger.warning(f"Groq model {model_name} unavailable, trying fallback: {exc}")
+                continue
+            raise exc
+    raise last_err
 
 def _try_parse_json(text: str) -> dict | None:
 
@@ -115,7 +125,7 @@ def parse_resume(raw_text: str)->Dict:
     raw_response=_call_groq(client, RESUME_SYSTEM_PROMPT, prompt)
     result=_try_parse_json(raw_response)
 
-    if result is None:
+    if result is not None:
         return _validate_resume_result(result)
     
 

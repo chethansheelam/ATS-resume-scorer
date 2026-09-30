@@ -112,7 +112,7 @@ with st.sidebar:
                 password = st.text_input("Password", type="password", key="signin_pw")
                 submitted = st.form_submit_button("Sign in", use_container_width=True)
             if submitted:
-                result = supabase_client.sign_in_with_password(email, password)
+                result = supabase_client.sign_in_with_password(email.strip(), password)
                 if "error" in result:
                     st.session_state.auth_error = result["error"]
                 else:
@@ -128,7 +128,7 @@ with st.sidebar:
                 password_up = st.text_input("Password (min 6 chars)", type="password", key="signup_pw")
                 submitted_up = st.form_submit_button("Create account", use_container_width=True)
             if submitted_up:
-                result = supabase_client.sign_up_with_password(email_up, password_up)
+                result = supabase_client.sign_up_with_password(email_up.strip(), password_up)
                 if "error" in result:
                     st.session_state.auth_error = result["error"]
                 elif result.get("pending_confirmation"):
