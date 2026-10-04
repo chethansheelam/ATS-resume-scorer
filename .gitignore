@@ -19,9 +19,9 @@ env/
 *.pem
 *.key
 
-# Streamlit secrets
-frontend/.streamlit/
-!frontend/.streamlit/config.toml
+# Node / React build artifacts
+frontend/node_modules/
+frontend/dist/
 
 # Project config files that should stay local
 config.py
