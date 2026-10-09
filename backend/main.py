@@ -1,22 +1,51 @@
 import logging
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.core.config import(
+# Optimize memory for low-resource environments (e.g. Render 512MB free tier)
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+
+from backend.core.config import (
     ALLOWED_ORIGINS, 
     APP_DESCRIPTION, 
     APP_TITLE, 
     APP_VERSION, 
     SPACY_MODEL_PRIMARY, 
-    SPACY_MODEL_SECONDARY, SENTENCE_TRANSFORMER_MODEL
+    SPACY_MODEL_SECONDARY, 
+    SENTENCE_TRANSFORMER_MODEL
 )
 from backend.api.routes import router
 
-logger=logging.getLogger('ats_resume_scorer')
+logger = logging.getLogger('ats_resume_scorer')
+
+class LazyEmbedder:
+    """Lazily loads SentenceTransformer on first use to prevent boot-time OOM."""
+    def __init__(self, model_name: str):
+        self.model_name = model_name
+        self._model = None
+
+    def _load(self):
+        if self._model is None:
+            logger.info(f'Loading SentenceTransformer: {self.model_name} (CPU mode)...')
+            try:
+                import torch
+                torch.set_num_threads(1)
+            except Exception:
+                pass
+            from sentence_transformers import SentenceTransformer
+            self._model = SentenceTransformer(self.model_name, device="cpu")
+            logger.info(f'Loaded {self.model_name}')
+        return self._model
+
+    def encode(self, *args, **kwargs):
+        return self._load().encode(*args, **kwargs)
 
 @asynccontextmanager
-async def lifespan(app:FastAPI):
+async def lifespan(app: FastAPI):
     logger.info('Starting ATS Resume Analyzer API...')
 
     logger.info(f'Loading spaCy NLP model: {SPACY_MODEL_PRIMARY}')
@@ -26,19 +55,21 @@ async def lifespan(app:FastAPI):
         logger.info(f'Loaded {SPACY_MODEL_PRIMARY}')
     except OSError:
         logger.warning(f'{SPACY_MODEL_PRIMARY} not found — falling back to {SPACY_MODEL_SECONDARY}')
-        app.state.nlp = spacy.load(SPACY_MODEL_SECONDARY)
-        logger.info(f'Loaded {SPACY_MODEL_SECONDARY} (fallback)')
+        try:
+            app.state.nlp = spacy.load(SPACY_MODEL_SECONDARY)
+            logger.info(f'Loaded {SPACY_MODEL_SECONDARY} (fallback)')
+        except OSError:
+            logger.warning(f'Downloading {SPACY_MODEL_SECONDARY}...')
+            from spacy.cli import download
+            download(SPACY_MODEL_SECONDARY)
+            app.state.nlp = spacy.load(SPACY_MODEL_SECONDARY)
 
-    logger.info(f'Loading SentenceTransformer: {SENTENCE_TRANSFORMER_MODEL}')
-    from sentence_transformers import SentenceTransformer
-    app.state.embedder = SentenceTransformer(SENTENCE_TRANSFORMER_MODEL)
-    logger.info(f'Loaded {SENTENCE_TRANSFORMER_MODEL}')
-
-    logger.info('All models loaded. API is ready to serve requests.')
+    app.state.embedder = LazyEmbedder(SENTENCE_TRANSFORMER_MODEL)
+    logger.info('API is ready to serve requests.')
 
     yield
 
-    logger.info('shutting down the api!!')
+    logger.info('Shutting down the API.')
 
 app=FastAPI(
     title=APP_TITLE, 
