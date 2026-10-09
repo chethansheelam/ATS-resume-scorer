@@ -1,76 +1,129 @@
-const COMPONENTS_CONFIG = [
-  { label: "Formatting & Structure", key: "formatting", max: 20, icon: "📝" },
-  { label: "Keywords & Skills", key: "keywords", max: 25, icon: "🔑" },
-  { label: "Content Quality", key: "content", max: 25, icon: "📄" },
-  { label: "Skill Validation", key: "skill_validation", max: 15, icon: "✅" },
-  { label: "ATS Compatibility", key: "ats_compatibility", max: 15, icon: "🤖" },
-];
-
-function ScoreDisplay({ analysis }) {
+export function ScoreGaugeCard({ analysis, filename }) {
   const score = Math.round(Number(analysis?.ATS_score ?? analysis?.ats_score ?? 0));
-  const interpretation = analysis?.interpretation || "";
-  const componentScores = analysis?.component_scores || {};
+  const interpretation = analysis?.interpretation;
+  const jdData = analysis?.jd_comparison || analysis?.jd_match_analysis;
+  const jdMatchPct = jdData?.match_percentage ? Math.round(Number(jdData.match_percentage)) : null;
 
-  const getScoreTheme = (val) => {
-    if (val >= 80) return { bg: "from-emerald-500 to-teal-600", text: "text-emerald-400", ring: "ring-emerald-500/20", lightBg: "bg-emerald-950/20 border-emerald-500/30" };
-    if (val >= 60) return { bg: "from-amber-500 to-orange-600", text: "text-amber-400", ring: "ring-amber-500/20", lightBg: "bg-amber-950/20 border-amber-500/30" };
-    return { bg: "from-rose-500 to-red-600", text: "text-rose-400", ring: "ring-rose-500/20", lightBg: "bg-rose-950/20 border-rose-500/30" };
+  // Gauge circle SVG properties
+  const radius = 42;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (Math.min(Math.max(score, 0), 100) / 100) * circumference;
+
+  const getScoreColor = (val) => {
+    if (val >= 80) return "#22C55E"; // Success
+    if (val >= 50) return "#F59E0B"; // Warning
+    return "#EF4444"; // Error
   };
 
-  const theme = getScoreTheme(score);
+  const getHeadline = (val) => {
+    if (val >= 80) return "Excellent. Resume is strongly optimized for ATS.";
+    if (val >= 65) return "Good. Minor tweaks will further improve ranking.";
+    if (val >= 45) return "Fair. Some structural and content changes are recommended.";
+    return "Needs Improvement. Critical issues detected.";
+  };
+
+  const scoreColor = getScoreColor(score);
+  const headline = interpretation || getHeadline(score);
 
   return (
-    <div className="space-y-6">
-      {/* Top Banner with Circular Gauge & Interpretation */}
-      <div className={`pro-card p-6 sm:p-8 flex flex-col md:flex-row items-center gap-8 ${theme.lightBg}`}>
-        <div className="relative flex items-center justify-center shrink-0">
-          <div className={`w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-gradient-to-tr ${theme.bg} flex flex-col items-center justify-center text-white shadow-2xl ring-8 ${theme.ring}`}>
-            <span className="text-4xl sm:text-5xl font-black tracking-tight">{score}</span>
-            <span className="text-[10px] font-bold uppercase tracking-wider opacity-90">out of 100</span>
-          </div>
-        </div>
-
-        <div className="space-y-2 text-center md:text-left flex-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-slate-900 border border-slate-700 shadow-xs">
-            <span className={theme.text}>ATS Readiness Index</span>
-          </div>
-          <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-            {score >= 80 ? "Excellent ATS Compatibility" : score >= 60 ? "Moderate ATS Compatibility" : "Needs Immediate Optimization"}
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
-            {interpretation || "Detailed heuristic and deep learning evaluation computed across five core ATS dimensions."}
-          </p>
+    <div className="bg-[#151719] border border-[#292C30] rounded-xl p-6 sm:p-7 flex flex-col md:flex-row items-center gap-6 sm:gap-8">
+      {/* Circular Gauge Ring */}
+      <div className="relative w-28 h-28 shrink-0 flex items-center justify-center">
+        <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+          <circle
+            cx="50"
+            cy="50"
+            r={radius}
+            fill="transparent"
+            stroke="#292C30"
+            strokeWidth="7"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r={radius}
+            fill="transparent"
+            stroke={scoreColor}
+            strokeWidth="7"
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeDashoffset}
+            strokeLinecap="round"
+            className="transition-all duration-700 ease-out"
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
+          <span className="text-2xl sm:text-3xl font-extrabold text-[#F5F5F5] leading-none">
+            {score}
+          </span>
+          <span className="text-[10px] text-[#9CA3AF] mt-0.5">
+            / 100
+          </span>
         </div>
       </div>
 
-      {/* 5-Component Score Breakdown Grid */}
-      <div className="pro-card p-6 sm:p-8">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-base font-bold text-white">📈 Score Breakdown</h3>
-          <span className="text-xs text-slate-500">5 Evaluated Dimensions</span>
-        </div>
+      {/* Right summary info */}
+      <div className="space-y-2 text-center md:text-left flex-1">
+        {filename && (
+          <div className="text-[11px] font-mono uppercase tracking-wider text-[#9CA3AF]">
+            {filename}
+          </div>
+        )}
+        <h2 className="text-base sm:text-lg font-semibold text-[#F5F5F5] tracking-tight leading-snug">
+          {headline}
+        </h2>
+        {jdMatchPct !== null && (
+          <div className="pt-0.5">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-[#3B82F6]">
+              JD Match: {jdMatchPct}%
+            </span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {COMPONENTS_CONFIG.map(({ label, key, max, icon }) => {
-            const val = Math.round(Number(componentScores[key] ?? 0));
+const COMPONENTS_CONFIG = [
+  { label: "Formatting", key: "formatting", max: 20 },
+  { label: "Keywords", key: "keywords", max: 25 },
+  { label: "Content quality", key: "content", max: 25 },
+  { label: "Skill validation", key: "skill_validation", max: 15 },
+  { label: "ATS compatibility", key: "ats_compatibility", max: 15 },
+];
+
+export function ScoreBreakdownCard({ analysis }) {
+  const componentScores = analysis?.component_scores || {};
+
+  const formatFraction = (val, max) => {
+    const formattedVal = String(Math.round(val)).padStart(2, "0");
+    const formattedMax = String(max).padStart(2, "0");
+    return `${formattedVal}/${formattedMax}`;
+  };
+
+  return (
+    <div className="bg-[#151719] border border-[#292C30] rounded-xl p-6 h-full flex flex-col justify-between">
+      <div>
+        <h3 className="text-xs font-semibold text-[#F5F5F5] mb-5">
+          Score breakdown
+        </h3>
+
+        <div className="space-y-4">
+          {COMPONENTS_CONFIG.map(({ label, key, max }) => {
+            const rawVal = Number(componentScores[key] ?? 0);
+            const val = Math.round(rawVal);
             const pct = Math.min(Math.max((val / max) * 100, 0), 100);
-            const colorClass = pct >= 80 ? "bg-emerald-500" : pct >= 60 ? "bg-amber-500" : "bg-rose-500";
-            const textColor = pct >= 80 ? "text-emerald-400" : pct >= 60 ? "text-amber-400" : "text-rose-400";
 
             return (
-              <div key={key} className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                    <span>{icon}</span> {label}
-                  </span>
-                  <span className={`text-xs font-black ${textColor}`}>
-                    {val} <span className="text-slate-500 font-normal">/ {max}</span>
+              <div key={key} className="space-y-1.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-[#F5F5F5] font-medium">{label}</span>
+                  <span className="font-mono text-[#9CA3AF] text-[11px]">
+                    {formatFraction(val, max)}
                   </span>
                 </div>
-
-                <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-[#0F1113] border border-[#292C30]/50 h-1.5 rounded-full overflow-hidden">
                   <div
-                    className={`h-full rounded-full transition-all duration-500 ${colorClass}`}
+                    className="h-full bg-[#3B82F6] rounded-full transition-all duration-500"
                     style={{ width: `${pct}%` }}
                   />
                 </div>
@@ -79,6 +132,14 @@ function ScoreDisplay({ analysis }) {
           })}
         </div>
       </div>
+    </div>
+  );
+}
+
+function ScoreDisplay({ analysis, filename }) {
+  return (
+    <div className="space-y-6">
+      <ScoreGaugeCard analysis={analysis} filename={filename} />
     </div>
   );
 }

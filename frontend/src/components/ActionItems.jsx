@@ -22,17 +22,17 @@ function ActionItems({ analysis }) {
   if (items.length === 0) return null;
 
   const badgeTheme = {
-    critical: "bg-rose-950/60 text-rose-300 border-rose-500/40",
-    high: "bg-amber-950/60 text-amber-300 border-amber-500/40",
-    medium: "bg-blue-950/60 text-blue-300 border-blue-500/40",
-    low: "bg-emerald-950/60 text-emerald-300 border-emerald-500/40",
+    critical: "bg-[#EF4444]/10 text-[#EF4444] border-[#EF4444]/30",
+    high: "bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/30",
+    medium: "bg-[#3B82F6]/10 text-[#3B82F6] border-[#3B82F6]/30",
+    low: "bg-[#22C55E]/10 text-[#22C55E] border-[#22C55E]/30",
   };
 
   return (
-    <div className="pro-card p-6 sm:p-8 space-y-4">
+    <div className="bg-[#151719] border border-[#292C30] rounded-xl p-6 sm:p-8 space-y-4">
       <div>
-        <h3 className="text-base font-bold text-white">⚡ Prioritized Action Items</h3>
-        <p className="text-xs text-slate-400 mt-0.5">
+        <h3 className="text-base font-bold text-[#F5F5F5]">Prioritized Action Items</h3>
+        <p className="text-xs text-[#9CA3AF] mt-0.5">
           Sorted by urgency to quickly maximize ATS readability and score.
         </p>
       </div>
@@ -41,17 +41,17 @@ function ActionItems({ analysis }) {
         {items.map((item, idx) => (
           <div
             key={idx}
-            className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 flex items-start gap-3"
+            className="p-3.5 rounded-xl bg-[#0F1113] border border-[#292C30] flex items-start gap-3"
           >
             <span
-              className={`shrink-0 px-2 py-0.5 rounded-md border text-[10px] font-black uppercase ${
+              className={`shrink-0 px-2 py-0.5 rounded-md border text-[10px] font-bold uppercase ${
                 badgeTheme[item.level] || badgeTheme.low
               }`}
             >
               {item.level}
             </span>
-            <div className="text-xs text-slate-300 leading-snug">
-              <strong className="text-white font-bold mr-1">[{item.title}]</strong>
+            <div className="text-xs text-[#9CA3AF] leading-snug">
+              <strong className="text-[#F5F5F5] font-semibold mr-1">[{item.title}]</strong>
               <span>{item.action}</span>
             </div>
           </div>

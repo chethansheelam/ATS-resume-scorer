@@ -40,58 +40,58 @@ function Dashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-extrabold text-white tracking-tight">📊 Analytics Dashboard</h2>
-        <p className="text-xs sm:text-sm text-slate-400 mt-1">
+        <h2 className="text-2xl font-bold text-[#F5F5F5] tracking-tight">Analytics Dashboard</h2>
+        <p className="text-xs sm:text-sm text-[#9CA3AF] mt-1">
           Track historical ATS compatibility scores, keyword match performance, and resume iterations.
         </p>
       </div>
 
       {error && (
-        <div className="p-4 bg-red-950/50 border border-red-800 text-red-300 rounded-xl text-xs font-medium">
+        <div className="p-4 bg-[#EF4444]/10 border border-[#EF4444]/30 text-[#EF4444] rounded-xl text-xs font-medium">
           {error}
         </div>
       )}
 
       {loading ? (
-        <div className="pro-card p-12 text-center text-xs text-slate-500">
+        <div className="bg-[#151719] border border-[#292C30] rounded-xl p-12 text-center text-xs text-[#9CA3AF]">
           Loading metrics...
         </div>
       ) : (
         <>
           {/* Top 3 KPI Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div className="pro-card pro-card-hover p-6 space-y-2">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Analyses</span>
-              <div className="text-3xl font-black text-white">{totalAnalyses}</div>
-              <p className="text-xs text-slate-400">Resumes evaluated</p>
+            <div className="bg-[#151719] border border-[#292C30] rounded-xl p-6 space-y-2 hover:border-[#3B82F6]/50 transition-colors">
+              <span className="text-[10px] font-semibold text-[#9CA3AF] uppercase tracking-wider">Total Analyses</span>
+              <div className="text-3xl font-black text-[#F5F5F5]">{totalAnalyses}</div>
+              <p className="text-xs text-[#9CA3AF]">Resumes evaluated</p>
             </div>
 
-            <div className="pro-card pro-card-hover p-6 space-y-2">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Latest Score</span>
-              <div className="text-3xl font-black text-indigo-400">
+            <div className="bg-[#151719] border border-[#292C30] rounded-xl p-6 space-y-2 hover:border-[#3B82F6]/50 transition-colors">
+              <span className="text-[10px] font-semibold text-[#9CA3AF] uppercase tracking-wider">Latest Score</span>
+              <div className="text-3xl font-black text-[#3B82F6]">
                 {latestScore}
-                {latestScore !== "--" && <span className="text-sm text-slate-500 font-normal"> / 100</span>}
+                {latestScore !== "--" && <span className="text-sm text-[#9CA3AF] font-normal"> / 100</span>}
               </div>
-              <p className="text-xs text-slate-400 truncate">{latestAnalysis?.filename || "No activity yet"}</p>
+              <p className="text-xs text-[#9CA3AF] truncate">{latestAnalysis?.filename || "No activity yet"}</p>
             </div>
 
-            <div className="pro-card pro-card-hover p-6 space-y-2">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Average Score</span>
-              <div className="text-3xl font-black text-white">
+            <div className="bg-[#151719] border border-[#292C30] rounded-xl p-6 space-y-2 hover:border-[#3B82F6]/50 transition-colors">
+              <span className="text-[10px] font-semibold text-[#9CA3AF] uppercase tracking-wider">Average Score</span>
+              <div className="text-3xl font-black text-[#F5F5F5]">
                 {avgScore}
-                {avgScore !== "--" && <span className="text-sm text-slate-500 font-normal"> / 100</span>}
+                {avgScore !== "--" && <span className="text-sm text-[#9CA3AF] font-normal"> / 100</span>}
               </div>
-              <p className="text-xs text-slate-400">Across all runs</p>
+              <p className="text-xs text-[#9CA3AF]">Across all runs</p>
             </div>
           </div>
 
           {/* Recent Activity Table */}
-          <div className="pro-card p-6 sm:p-8 space-y-4">
+          <div className="bg-[#151719] border border-[#292C30] rounded-xl p-6 sm:p-8 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-white">Recent Activity</h3>
+              <h3 className="text-base font-bold text-[#F5F5F5]">Recent Activity</h3>
               <Link
                 to="/scorer"
-                className="btn-accent px-3.5 py-1.5 rounded-lg text-xs"
+                className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-white bg-[#3B82F6] hover:bg-[#2563EB] transition-colors"
               >
                 + Analyze Resume
               </Link>
@@ -99,8 +99,8 @@ function Dashboard() {
 
             {history.length === 0 ? (
               <div className="text-center py-10 space-y-3">
-                <p className="text-xs text-slate-500">No previous resume evaluations found.</p>
-                <Link to="/scorer" className="btn-accent px-5 py-2 rounded-xl text-xs font-bold inline-block">
+                <p className="text-xs text-[#9CA3AF]">No previous resume evaluations found.</p>
+                <Link to="/scorer" className="px-5 py-2 rounded-lg text-xs font-semibold text-white bg-[#3B82F6] hover:bg-[#2563EB] inline-block transition-colors">
                   Run First Analysis
                 </Link>
               </div>
@@ -108,26 +108,26 @@ function Dashboard() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-slate-800 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
+                    <tr className="border-b border-[#292C30] text-[#9CA3AF] font-semibold uppercase tracking-wider text-[10px]">
                       <th className="py-3 px-3">File</th>
                       <th className="py-3 px-3">ATS Score</th>
                       <th className="py-3 px-3">Date</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60">
+                  <tbody className="divide-y divide-[#292C30]">
                     {history.slice(0, 5).map((item) => {
                       const sc = Math.round(Number(item.analysis_result?.ats_score ?? item.analysis_result?.ATS_score ?? 0));
                       const dateStr = item.created_at ? new Date(item.created_at).toLocaleDateString() : "--";
                       return (
-                        <tr key={item.id} className="hover:bg-slate-800/40 transition-colors">
-                          <td className="py-3.5 px-3 font-semibold text-slate-200 flex items-center gap-2">
+                        <tr key={item.id} className="hover:bg-[#1C1F22] transition-colors">
+                          <td className="py-3.5 px-3 font-medium text-[#F5F5F5] flex items-center gap-2">
                             <span>📄</span> {item.filename || "Resume"}
                           </td>
                           <td className="py-3.5 px-3">
-                            <span className="font-black text-indigo-400">{sc}</span>
-                            <span className="text-slate-500 font-normal"> / 100</span>
+                            <span className="font-bold text-[#3B82F6]">{sc}</span>
+                            <span className="text-[#9CA3AF] font-normal"> / 100</span>
                           </td>
-                          <td className="py-3.5 px-3 text-slate-400">{dateStr}</td>
+                          <td className="py-3.5 px-3 text-[#9CA3AF]">{dateStr}</td>
                         </tr>
                       );
                     })}

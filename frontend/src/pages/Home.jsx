@@ -2,149 +2,233 @@ import { Link } from "react-router-dom";
 
 function Home() {
   return (
-    <div className="space-y-16 py-4">
-      {/* Hero Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 border border-indigo-500/20 p-8 sm:p-14 lg:p-16 shadow-2xl text-center">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="space-y-20 py-4 max-w-4xl mx-auto">
+      {/* 1. Hero Section */}
+      <section className="text-center space-y-6 pt-4 sm:pt-8">
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#F5F5F5] leading-[1.12]">
+          Pass the ATS Filter. <br />
+          <span className="text-[#3B82F6]">Land More Interviews.</span>
+        </h1>
 
-        <div className="relative max-w-3xl mx-auto space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 shadow-xs">
-            <span>⚡ Deep Learning & Heuristic ATS Scoring</span>
+        <p className="text-sm sm:text-base text-[#9CA3AF] max-w-2xl mx-auto leading-relaxed">
+          Validate your resume formatting, semantic keyword density, and demonstrated project skills before recruiters review your application.
+        </p>
+
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link
+            to="/scorer"
+            className="w-full sm:w-auto px-7 py-3 rounded-lg text-sm font-medium text-white bg-[#3B82F6] hover:bg-[#2563EB] transition-all shadow-xs text-center"
+          >
+            Analyze Resume Now
+          </Link>
+          <Link
+            to="/resources"
+            className="w-full sm:w-auto px-6 py-3 rounded-lg text-sm font-medium text-[#F5F5F5] bg-[#151719] hover:bg-[#1E2124] border border-[#292C30] transition-all text-center shadow-xs"
+          >
+            ATS Rules & Guidelines
+          </Link>
+        </div>
+      </section>
+
+      {/* 2. Resume Illustration: Dark card, subtle borders, restrained green status indicators */}
+      <section className="pt-2">
+        <div className="bg-[#151719] border border-[#292C30] rounded-xl p-6 sm:p-8 max-w-2xl mx-auto space-y-6 text-left relative">
+          {/* Top Paper Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#292C30]">
+            <div className="space-y-1.5">
+              <div className="h-4 w-40 bg-[#F5F5F5]/30 rounded" />
+              <div className="h-2.5 w-28 bg-[#292C30] rounded" />
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/20">
+                <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                ATS Ready: 94 / 100
+              </span>
+              <span className="hidden sm:inline-flex px-2.5 py-1 rounded-md text-[11px] font-medium bg-[#3B82F6]/10 text-[#3B82F6] border border-[#3B82F6]/20">
+                Parsed Clean
+              </span>
+            </div>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
-            Pass the ATS Filter. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-300">
-              Land More Interviews.
+          {/* Section 1: Experience with gray text lines & status indicators */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-[#9CA3AF] font-semibold">
+                WORK EXPERIENCE
+              </span>
+              <span className="text-[10px] font-mono text-[#22C55E] font-medium">
+                ✓ Chronological order verified
+              </span>
+            </div>
+
+            <div className="space-y-2 pt-0.5">
+              <div className="flex items-center gap-3">
+                <div className="h-2 bg-[#292C30] rounded-full w-full" />
+                <span className="shrink-0 w-2 h-2 rounded-full bg-[#22C55E]" title="Verified Action Verb" />
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="h-2 bg-[#292C30] rounded-full w-5/6" />
+                <span className="shrink-0 w-2 h-2 rounded-full bg-[#22C55E]" title="Quantified Metric Detected" />
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="h-2 bg-[#292C30] rounded-full w-4/6" />
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: Skills with status indicators */}
+          <div className="space-y-2.5 pt-2">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-[#9CA3AF] font-semibold">
+              DEMONSTRATED TECHNICAL SKILLS
             </span>
-          </h1>
-
-          <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Validate your resume formatting, semantic keyword density, and demonstrated project skills before recruiters review your application.
-          </p>
-
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              to="/scorer"
-              className="w-full sm:w-auto btn-accent px-8 py-3.5 rounded-xl text-sm shadow-xl hover:scale-[1.02] active:scale-[0.98] text-center"
-            >
-              🚀 Analyze Resume Now
-            </Link>
-            <Link
-              to="/resources"
-              className="w-full sm:w-auto px-7 py-3.5 rounded-xl text-sm font-semibold text-slate-200 bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 transition-all text-center"
-            >
-              📚 ATS Rules & Guidelines
-            </Link>
+            <div className="flex flex-wrap gap-2 pt-0.5">
+              {[
+                "Python",
+                "System Architecture",
+                "Docker",
+                "FastAPI",
+                "PostgreSQL",
+                "REST APIs",
+              ].map((skill, idx) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-[#0F1113] text-[#F5F5F5] border border-[#292C30]"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />
+                  {skill}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* 5-Dimensional Core Features */}
-      <div className="space-y-6">
-        <div className="text-center max-w-xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+      {/* 3. Multi-Dimensional Analysis (Feature Cards) */}
+      <section className="space-y-8">
+        <div className="text-center max-w-xl mx-auto space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#F5F5F5] tracking-tight">
             Multi-Dimensional Analysis
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400 mt-2">
-            Local NLP models evaluate your resume against 5 industry-standard criteria.
+          <p className="text-xs sm:text-sm text-[#9CA3AF]">
+            Objective scoring evaluated against 5 industry-standard criteria.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="pro-card pro-card-hover p-6 space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center text-xl font-bold">
-              📊
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Card 1: 5-Pillar Score */}
+          <div className="bg-[#151719] border border-[#292C30] rounded-xl p-6 space-y-4">
+            <div className="w-9 h-9 rounded-lg bg-[#3B82F6]/10 text-[#3B82F6] border border-[#3B82F6]/20 flex items-center justify-center text-sm font-semibold">
+              01
             </div>
-            <h3 className="text-base font-bold text-white">5-Pillar Score Breakdown</h3>
-            <ul className="text-xs text-slate-400 space-y-2 pt-1">
-              <li className="flex justify-between border-b border-slate-800 pb-1">
+            <div>
+              <h3 className="text-sm font-semibold text-[#F5F5F5]">5-Pillar Score Breakdown</h3>
+              <p className="text-xs text-[#9CA3AF] mt-1 leading-relaxed">
+                Evaluates layout, keywords, content, skill validity, and ATS standard compliance.
+              </p>
+            </div>
+            <ul className="text-xs text-[#9CA3AF] space-y-2 pt-2 border-t border-[#292C30]">
+              <li className="flex justify-between">
                 <span>Formatting & Structure</span>
-                <span className="text-indigo-300 font-mono font-bold">20%</span>
+                <span className="font-mono text-[#3B82F6] font-medium">20%</span>
               </li>
-              <li className="flex justify-between border-b border-slate-800 pb-1">
+              <li className="flex justify-between">
                 <span>Keywords & Skills</span>
-                <span className="text-indigo-300 font-mono font-bold">25%</span>
+                <span className="font-mono text-[#3B82F6] font-medium">25%</span>
               </li>
-              <li className="flex justify-between border-b border-slate-800 pb-1">
+              <li className="flex justify-between">
                 <span>Content Quality</span>
-                <span className="text-indigo-300 font-mono font-bold">25%</span>
+                <span className="font-mono text-[#3B82F6] font-medium">25%</span>
               </li>
-              <li className="flex justify-between border-b border-slate-800 pb-1">
+              <li className="flex justify-between">
                 <span>Skill Validation</span>
-                <span className="text-indigo-300 font-mono font-bold">15%</span>
+                <span className="font-mono text-[#3B82F6] font-medium">15%</span>
               </li>
               <li className="flex justify-between">
                 <span>ATS Compatibility</span>
-                <span className="text-indigo-300 font-mono font-bold">15%</span>
+                <span className="font-mono text-[#3B82F6] font-medium">15%</span>
               </li>
             </ul>
           </div>
 
-          <div className="pro-card pro-card-hover p-6 space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center text-xl font-bold">
-              🔍
+          {/* Card 2: Semantic Verification */}
+          <div className="bg-[#151719] border border-[#292C30] rounded-xl p-6 space-y-4">
+            <div className="w-9 h-9 rounded-lg bg-[#3B82F6]/10 text-[#3B82F6] border border-[#3B82F6]/20 flex items-center justify-center text-sm font-semibold">
+              02
             </div>
-            <h3 className="text-base font-bold text-white">Semantic Skill Verification</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Detects whether claimed skills are supported with real-world evidence from your project and experience bullet points.
-            </p>
-            <div className="p-3 bg-emerald-950/40 border border-emerald-800/40 rounded-xl text-emerald-300 text-xs font-medium">
+            <div>
+              <h3 className="text-sm font-semibold text-[#F5F5F5]">Semantic Skill Verification</h3>
+              <p className="text-xs text-[#9CA3AF] mt-1 leading-relaxed">
+                Detects whether claimed skills are supported with real evidence in project bullets.
+              </p>
+            </div>
+            <div className="p-3 bg-[#22C55E]/10 border border-[#22C55E]/20 rounded-lg text-xs text-[#22C55E] font-medium">
               ✓ Flags empty keyword claims before recruiters discard your resume.
             </div>
+            <p className="text-xs text-[#9CA3AF] leading-relaxed">
+              Differentiates between buzzwords and demonstrated execution.
+            </p>
           </div>
 
-          <div className="pro-card pro-card-hover p-6 space-y-3">
-            <div className="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center text-xl font-bold">
-              🔒
+          {/* Card 3: 100% Private & Secure */}
+          <div className="bg-[#151719] border border-[#292C30] rounded-xl p-6 space-y-4">
+            <div className="w-9 h-9 rounded-lg bg-[#3B82F6]/10 text-[#3B82F6] border border-[#3B82F6]/20 flex items-center justify-center text-sm font-semibold">
+              03
             </div>
-            <h3 className="text-base font-bold text-white">100% Private & Local AI</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              All parsing, vector embeddings, and similarity matching execute locally using spaCy and SentenceTransformer architectures.
+            <div>
+              <h3 className="text-sm font-semibold text-[#F5F5F5]">Private & Secure Analysis</h3>
+              <p className="text-xs text-[#9CA3AF] mt-1 leading-relaxed">
+                All parsing, vector embeddings, and similarity matching execute locally and securely.
+              </p>
+            </div>
+            <div className="p-3 bg-[#0F1113] border border-[#292C30] rounded-lg text-xs text-[#F5F5F5] font-medium">
+              🔒 Zero cloud data leaks. Your information stays strictly private.
+            </div>
+            <p className="text-xs text-[#9CA3AF] leading-relaxed">
+              Fast processing pipelines designed for reliable format parsing and semantic checks.
             </p>
-            <div className="p-3 bg-purple-950/40 border border-purple-800/40 rounded-xl text-purple-300 text-xs font-medium">
-              🔒 Zero cloud leaks. Your data stays entirely in your environment.
-            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* 3-Step Guide */}
-      <div className="pro-card p-8 sm:p-10 space-y-8">
-        <h2 className="text-lg font-bold text-white text-center">How ATS Resume Scorer Works</h2>
+      {/* 4. Three-Step Workflow */}
+      <section className="bg-[#151719] border border-[#292C30] rounded-xl p-8 sm:p-10 space-y-8">
+        <h2 className="text-base sm:text-lg font-semibold text-[#F5F5F5] text-center">
+          How ATS Resume Scorer Works
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="flex flex-col items-center text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-lg shadow-indigo-500/30">
+          <div className="flex flex-col items-center text-center space-y-2.5">
+            <div className="w-8 h-8 rounded-full bg-[#3B82F6] text-white flex items-center justify-center font-semibold text-xs shadow-xs">
               1
             </div>
-            <h4 className="font-bold text-slate-200 text-sm">Upload Resume</h4>
-            <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
+            <h4 className="font-semibold text-[#F5F5F5] text-xs">Upload Resume</h4>
+            <p className="text-xs text-[#9CA3AF] max-w-xs leading-relaxed">
               Upload PDF, DOC, or DOCX and optionally paste target job descriptions.
             </p>
           </div>
 
-          <div className="flex flex-col items-center text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center font-black text-sm shadow-lg shadow-purple-500/30">
+          <div className="flex flex-col items-center text-center space-y-2.5">
+            <div className="w-8 h-8 rounded-full bg-[#3B82F6] text-white flex items-center justify-center font-semibold text-xs shadow-xs">
               2
             </div>
-            <h4 className="font-bold text-slate-200 text-sm">AI NLP Processing</h4>
-            <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
-              Extracts sections, computes vector semantic match, and validates project context.
+            <h4 className="font-semibold text-[#F5F5F5] text-xs">Deep Analysis</h4>
+            <p className="text-xs text-[#9CA3AF] max-w-xs leading-relaxed">
+              Extracts sections, computes keyword match, and validates project context.
             </p>
           </div>
 
-          <div className="flex flex-col items-center text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-black text-sm shadow-lg shadow-emerald-500/30">
+          <div className="flex flex-col items-center text-center space-y-2.5">
+            <div className="w-8 h-8 rounded-full bg-[#3B82F6] text-white flex items-center justify-center font-semibold text-xs shadow-xs">
               3
             </div>
-            <h4 className="font-bold text-slate-200 text-sm">Actionable Reports</h4>
-            <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
+            <h4 className="font-semibold text-[#F5F5F5] text-xs">Actionable Reports</h4>
+            <p className="text-xs text-[#9CA3AF] max-w-xs leading-relaxed">
               Export downloadable PDF reports, view prioritized fixes, and bridge skills gaps.
             </p>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

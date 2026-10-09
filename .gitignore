@@ -23,11 +23,6 @@ env/
 frontend/node_modules/
 frontend/dist/
 
-# Project config files that should stay local
-config.py
-**/config.py
-backend/core/config.py
-
 # Dataset and generated data
 dataset/
 *.csv

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import api from "../services/api";
-import ScoreDisplay from "./ScoreDisplay";
+import { ScoreGaugeCard, ScoreBreakdownCard } from "./ScoreDisplay";
 import StrengthsIssues from "./StrengthsIssues";
 import SkillValidation from "./SkillValidation";
 import JDComparison from "./JDComparison";
@@ -10,6 +10,7 @@ import Recommendations from "./Recommendations";
 
 function ResultsDashboard({ analysis, onReset, filename }) {
   const [downloadingPdf, setDownloadingPdf] = useState(false);
+  const [showDetailed, setShowDetailed] = useState(false);
 
   const jdData = analysis?.jd_comparison || analysis?.jd_match_analysis;
 
@@ -62,7 +63,7 @@ function ResultsDashboard({ analysis, onReset, filename }) {
       link.click();
       link.remove();
       window.URL.revokeObjectURL(url);
-    } catch (err) {
+    } catch {
       alert("Failed to export PDF report from backend.");
     } finally {
       setDownloadingPdf(false);
@@ -70,67 +71,71 @@ function ResultsDashboard({ analysis, onReset, filename }) {
   };
 
   return (
-    <div className="space-y-6 pt-2">
-      {/* Action Header Card */}
-      <div className="pro-card p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-l-4 border-l-indigo-500">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <h2 className="text-lg font-bold text-white">Analysis Results Ready</h2>
-          </div>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Report for <strong className="text-slate-200">{filename || "Uploaded Resume"}</strong>
-          </p>
-        </div>
+    <div className="space-y-4">
+      {/* Top Header with Back Navigation and Exports */}
+      <div className="flex items-center justify-between pb-1">
+        <button
+          type="button"
+          onClick={onReset}
+          className="text-xs text-[#9CA3AF] hover:text-[#F5F5F5] flex items-center gap-1.5 transition-colors font-medium group cursor-pointer"
+        >
+          <span className="group-hover:-translate-x-0.5 transition-transform">←</span>
+          <span>New analysis</span>
+        </button>
 
-        <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={generateTxtSummary}
+            className="px-3 py-1.5 rounded-lg text-xs font-medium text-[#F5F5F5] bg-[#151719] hover:bg-[#1E2124] border border-[#292C30] transition-colors cursor-pointer"
+          >
+            Summary (.txt)
+          </button>
           <button
             type="button"
             onClick={handleDownloadPdf}
             disabled={downloadingPdf}
-            className="flex-1 sm:flex-initial btn-accent px-4 py-2 rounded-xl text-xs"
+            className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-white bg-[#3B82F6] hover:bg-[#2563EB] disabled:opacity-50 transition-colors shadow-xs cursor-pointer"
           >
-            {downloadingPdf ? "Generating PDF..." : "📑 Download PDF"}
-          </button>
-
-          <button
-            type="button"
-            onClick={generateTxtSummary}
-            className="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-semibold text-slate-200 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 transition-colors"
-          >
-            📄 Summary (.txt)
-          </button>
-
-          <button
-            type="button"
-            onClick={onReset}
-            className="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 bg-slate-800/40 hover:bg-slate-800 transition-colors"
-          >
-            ↺ Reset
+            {downloadingPdf ? "Generating..." : "Download PDF"}
           </button>
         </div>
       </div>
 
-      {/* 1. Overall Score & 5-Component Breakdown */}
-      <ScoreDisplay analysis={analysis} />
+      {/* Row 1: Overall Score Gauge Card */}
+      <ScoreGaugeCard analysis={analysis} filename={filename} />
 
-      {/* 2. Strengths & Critical Issues */}
-      <StrengthsIssues analysis={analysis} />
+      {/* Row 2: Two equal cards: Score Breakdown + Key strengths & Critical issues */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+        <ScoreBreakdownCard analysis={analysis} />
+        <StrengthsIssues analysis={analysis} />
+      </div>
 
-      {/* 3. Skill Validation */}
+      {/* Row 3: Skill Validation */}
       <SkillValidation analysis={analysis} />
 
-      {/* 4. JD Comparison (if present) */}
+      {/* Row 4: JD Comparison Analysis (if present) */}
       {jdData && <JDComparison jdData={jdData} />}
 
-      {/* 5. Detailed Feedback */}
-      <DetailedFeedback analysis={analysis} />
+      {/* Additional In-Depth Insights (Collapsible to preserve all existing capabilities) */}
+      <div className="pt-2">
+        <button
+          type="button"
+          onClick={() => setShowDetailed(!showDetailed)}
+          className="w-full py-2.5 px-4 rounded-xl text-xs font-medium text-[#9CA3AF] hover:text-[#F5F5F5] bg-[#151719] border border-[#292C30] flex items-center justify-between transition-colors cursor-pointer"
+        >
+          <span>{showDetailed ? "Hide in-depth feedback & action items" : "View in-depth feedback & prioritized action items"}</span>
+          <span>{showDetailed ? "▲" : "▼"}</span>
+        </button>
 
-      {/* 6. Prioritized Action Items */}
-      <ActionItems analysis={analysis} />
-
-      {/* 7. Strategic Recommendations */}
-      <Recommendations analysis={analysis} />
+        {showDetailed && (
+          <div className="space-y-4 pt-4">
+            <DetailedFeedback analysis={analysis} />
+            <ActionItems analysis={analysis} />
+            <Recommendations analysis={analysis} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

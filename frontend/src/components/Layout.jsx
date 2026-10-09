@@ -11,31 +11,34 @@ function Layout() {
   };
 
   const navItemClass = ({ isActive }) =>
-    `px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+    `px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 ${
       isActive
-        ? "bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 shadow-xs"
-        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+        ? "bg-[#151719] text-[#F5F5F5] border border-[#292C30] shadow-xs"
+        : "text-[#9CA3AF] hover:text-[#F5F5F5] hover:bg-[#151719]/60"
     }`;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0b0f19] text-slate-100 font-sans selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#0F1113] text-[#F5F5F5] font-sans selection:bg-[#3B82F6] selection:text-white">
       {/* Top Navbar */}
-      <header className="sticky top-0 z-50 bg-[#0b0f19]/80 backdrop-blur-xl border-b border-slate-800/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <header className="sticky top-0 z-50 bg-[#0F1113]/95 backdrop-blur-md border-b border-[#292C30]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white text-base shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform">
-                🎯
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white shadow-xs transition-transform group-hover:scale-105 bg-[#3B82F6]">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+                  <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                  <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                  <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                  <circle cx="12" cy="12" r="1" fill="currentColor" />
+                </svg>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-base tracking-tight text-white">ATS Pro</span>
-                <span className="px-2 py-0.5 text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full tracking-wide uppercase">
-                  AI NLP
-                </span>
-              </div>
+              <span className="font-bold text-sm tracking-tight text-[#F5F5F5]">
+                ATS Resume Scorer
+              </span>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-1.5">
+            <nav className="hidden md:flex items-center gap-1">
               <NavLink to="/" className={navItemClass}>
                 Home
               </NavLink>
@@ -58,38 +61,46 @@ function Layout() {
             {user ? (
               <div className="flex items-center gap-3">
                 <div className="hidden sm:flex flex-col text-right">
-                  <span className="text-xs font-semibold text-slate-200">{user.email?.split("@")[0]}</span>
-                  <span className="text-[10px] text-slate-400 font-mono">{user.email}</span>
+                  <span className="text-xs font-semibold text-[#F5F5F5]">{user.email?.split("@")[0]}</span>
+                  <span className="text-[10px] text-[#9CA3AF] font-mono">{user.email}</span>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="px-3.5 py-1.5 text-xs font-semibold text-slate-300 bg-slate-800/80 hover:bg-slate-700 rounded-lg transition-colors border border-slate-700"
+                  className="px-3 py-1.5 text-xs font-medium text-[#F5F5F5] bg-[#151719] hover:bg-[#1E2124] rounded-lg transition-colors border border-[#292C30]"
                 >
                   Sign Out
                 </button>
               </div>
             ) : (
-              <Link
-                to="/login"
-                className="btn-accent px-4 py-1.5 rounded-lg text-xs"
-              >
-                Sign In
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link
+                  to="/login"
+                  className="px-3 py-1.5 text-xs font-medium text-[#9CA3AF] hover:text-[#F5F5F5] transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/login?mode=signup"
+                  className="px-3.5 py-1.5 text-xs font-medium text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-lg shadow-xs transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </div>
             )}
           </div>
         </div>
       </header>
 
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8">
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-[#080c14] py-6 text-center text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>ATS Resume Scorer & Skill Matcher — Powered by Local spaCy NLP & SentenceTransformers</span>
-          <span className="text-indigo-400 font-semibold">100% Privacy & Data Security</span>
+      <footer className="border-t border-[#292C30] bg-[#0F1113] py-6 text-center text-xs text-[#9CA3AF]">
+        <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span>ATS Resume Scorer & Skill Matcher — Powered by Local NLP & Embeddings</span>
+          <span className="text-[#3B82F6] font-medium">100% Privacy & Data Security</span>
         </div>
       </footer>
     </div>

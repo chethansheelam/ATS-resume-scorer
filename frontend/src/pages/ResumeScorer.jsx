@@ -60,38 +60,40 @@ function ResumeScorer() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-black text-white tracking-tight">
-          🎯 ATS Resume Scorer
-        </h2>
-        <p className="text-xs sm:text-sm text-slate-400 mt-1">
-          Upload your resume — and optionally a target job description — for comprehensive ATS scoring and skill validation.
-        </p>
-      </div>
-
-      <ScorerInputSection
-        analysisMode={analysisMode}
-        setAnalysisMode={setAnalysisMode}
-        resumeFile={resumeFile}
-        setResumeFile={setResumeFile}
-        jdMethod={jdMethod}
-        setJdMethod={setJdMethod}
-        jdText={jdText}
-        setJdText={setJdText}
-        jdFile={jdFile}
-        setJdFile={setJdFile}
-        onAnalyze={handleAnalyze}
-        loading={loading}
-        error={error}
-      />
-
-      {result && (
+    <div className="w-full">
+      {result ? (
         <ResultsDashboard
           analysis={result}
           onReset={handleReset}
           filename={resumeFile?.name}
         />
+      ) : (
+        <div className="space-y-6">
+          <div>
+            <h1 className="text-2xl font-bold text-[#F5F5F5] tracking-tight">
+              ATS Scorer
+            </h1>
+            <p className="text-xs sm:text-sm text-[#9CA3AF] mt-1">
+              Upload your resume to get a full ATS compatibility score and prioritized fixes.
+            </p>
+          </div>
+
+          <ScorerInputSection
+            analysisMode={analysisMode}
+            setAnalysisMode={setAnalysisMode}
+            resumeFile={resumeFile}
+            setResumeFile={setResumeFile}
+            jdMethod={jdMethod}
+            setJdMethod={setJdMethod}
+            jdText={jdText}
+            setJdText={setJdText}
+            jdFile={jdFile}
+            setJdFile={setJdFile}
+            onAnalyze={handleAnalyze}
+            loading={loading}
+            error={error}
+          />
+        </div>
       )}
     </div>
   );
